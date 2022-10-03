@@ -11,6 +11,7 @@
   ],
   "include": [
     "src/**/*.d.ts",
-    "dragData.d.ts"
+    "chartjs-custom-type.d.ts",
+    "chartjs-data-drag.d.ts"
   ]
 }

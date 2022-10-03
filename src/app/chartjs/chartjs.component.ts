@@ -8,7 +8,7 @@ import {
 import { Chart } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import * as chart from 'chartjs-plugin-dragdata';
+import * as ChartJSdragDataPlugin from 'chartjs-plugin-dragdata';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 const DATA = [
@@ -50,7 +50,7 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas')
   canvas!: ElementRef;
 
-  chart!: Chart;
+  chart!: any;
 
   public lineChartOptions: any;
 
@@ -62,12 +62,12 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
     '2021-11-10 09:00:28',
   ];
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     console.log(this.canvas.nativeElement);
     const chartCtx = this.canvas.nativeElement;
-    Chart.register([annotationPlugin, zoomPlugin, chart]);
+    Chart.register([annotationPlugin, zoomPlugin, ChartJSdragDataPlugin]);
     this.chart = new Chart(chartCtx, {
       type: 'line',
       data: {
@@ -86,6 +86,7 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
         ],
       },
       options: {
+        responsive: false,
         scales: {
           x: {
             type: 'timeseries',
@@ -114,11 +115,37 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
                 enabled: true,
               },
               mode: 'x',
-              onZoomComplete: ({ chart }: any) => {},
+              onZoomComplete: ({ chart }: any) => { },
             },
             pan: {
               enabled: true,
               mode: 'x',
+            },
+          },
+          dragData: {
+            onDragStart: (
+              e: MouseEvent,
+              datasetIndex: number,
+            ) => {
+              return datasetIndex === 0 ? true : false;
+            },
+            onDrag: (
+              e: { target: { style: { cursor: string } } },
+              _datasetIndex: any,
+              _index: any,
+              _value: any
+            ) => {
+              e.target.style.cursor = 'grabbing';
+              // console.log(e, datasetIndex, index, value);
+            },
+            onDragEnd: (
+              e: { target: { style: { cursor: string } } },
+              datasetIndex: any,
+              index: any,
+              value: any
+            ) => {
+              e.target.style.cursor = 'default';
+              this.createOriginalData();
             },
           },
         },
@@ -126,5 +153,5 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  createOriginalData() {}
+  createOriginalData() { }
 }
