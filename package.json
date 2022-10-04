@@ -25,6 +25,8 @@
     "chartjs-plugin-dragdata": "^2.2.4",
     "chartjs-plugin-zoom": "^1.2.1",
     "date-fns": "^2.29.3",
+    "highcharts": "^10.2.1",
+    "highcharts-angular": "^3.0.0",
     "ng2-charts": "^4.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

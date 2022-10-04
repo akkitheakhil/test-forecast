@@ -62,10 +62,9 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
     '2021-11-10 09:00:28',
   ];
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    console.log(this.canvas.nativeElement);
     const chartCtx = this.canvas.nativeElement;
     Chart.register([annotationPlugin, zoomPlugin, ChartJSdragDataPlugin]);
     this.chart = new Chart(chartCtx, {
@@ -115,7 +114,7 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
                 enabled: true,
               },
               mode: 'x',
-              onZoomComplete: ({ chart }: any) => { },
+              onZoomComplete: ({ chart }: any) => {},
             },
             pan: {
               enabled: true,
@@ -123,10 +122,7 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
             },
           },
           dragData: {
-            onDragStart: (
-              e: MouseEvent,
-              datasetIndex: number,
-            ) => {
+            onDragStart: (e: MouseEvent, datasetIndex: number) => {
               return datasetIndex === 0 ? true : false;
             },
             onDrag: (
@@ -153,5 +149,5 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  createOriginalData() { }
+  createOriginalData() {}
 }

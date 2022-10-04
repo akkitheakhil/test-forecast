@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { HighchartsChartModule } from 'highcharts-angular';
+import { NgChartsModule } from 'ng2-charts';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgChartsModule } from 'ng2-charts';
 import { ChartjsComponent } from './chartjs/chartjs.component';
+import { HighchartComponent } from './highchart/highchart.component';
+import { NavigatorComponent } from './navigator/navigator.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ChartjsComponent
-  ],
+  declarations: [AppComponent, ChartjsComponent, HighchartComponent, NavigatorComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgChartsModule
+    NgChartsModule,
+    HighchartsChartModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
