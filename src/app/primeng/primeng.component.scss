@@ -1,0 +1,147 @@
+.card {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .header {
+    position: absolute;
+    top: 10px;
+  }
+
+  .mat-form-field {
+    width: 200px;
+    margin-bottom: 60px;
+  }
+}
+
+.left {
+  width: 30%;
+  background: white;
+  z-index: 2;
+  height: 100%;
+  padding: 8px;
+  h1 {
+    margin-top: 24px;
+    text-align: center;
+  }
+  border: 1px solid black;
+}
+
+:host {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+
+  ::ng-deep {
+    .custom-chart-tooltip {
+
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2), 0px 0px 4px rgba(0, 0, 0, 0.2);
+      color: black;
+      pointer-events: none;
+      position: absolute;
+      transform: translate(20px, -50%);
+      transition: all .1s ease;
+      width: 200px;
+      z-index: 3;
+
+
+      .tooltip-body {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        font-weight: 400;
+
+        .tooltip-row {
+          padding: 10px 8px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .icon {
+            height: 20px;
+            width: 4px;
+            border-radius: 12px;
+          }
+        }
+
+        .tooltip-footer {
+          display: flex;
+          padding: 8px 12px;
+          border-top: 1px solid #F1F0EF;
+          color: #9A9997;
+        }
+      }
+    }
+
+    .custom-backdrop {
+    background-color: transparent;
+    }
+
+    .custom-label-annotation {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      gap: 8px;
+      width: 87px;
+      height: 40px;
+      border-radius: 8px;
+      background: #222222;
+      color: white;
+      transform: translate(-50%, -100%);
+      text-align: center;
+      z-index: 3;
+    }
+
+    .custom-label-annotation-today {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      gap: 4px;
+      width: 54px;
+      height: 24px;
+      background: #F1F0EF;
+      border-radius: 4px;
+      transform: translate(-50%, -100%);
+      z-index: 1;
+    }
+
+    .today-label {
+      position: absolute;
+      height: 20px;
+      width: 40px;
+      padding: 8px;
+      width: 54px;
+      background: #F1F0EF;
+      border-radius: 4px;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 1;
+      &::after {
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 35px;
+        bottom: -35px;
+        transform: translateX(-2px);
+        background: #F1F0EF;
+        opacity: 0.45;
+
+      }
+    }
+  }
+}

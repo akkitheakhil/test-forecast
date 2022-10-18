@@ -10,33 +10,9 @@ import 'chartjs-adapter-date-fns';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import * as ChartJSdragDataPlugin from 'chartjs-plugin-dragdata';
 import zoomPlugin from 'chartjs-plugin-zoom';
-
-const DATA = [
-  {
-    x: '2021-11-06 23:39:30',
-    y: 21000,
-  },
-  {
-    x: '2021-11-07 01:00:28',
-    y: 26000,
-  },
-  {
-    x: '2021-11-08 09:00:28',
-    y: 35000,
-  },
-  {
-    x: '2021-11-09 09:00:28',
-    y: 30000,
-  },
-  {
-    x: '2021-11-10 09:00:28',
-    y: 28000,
-  },
-  {
-    x: '2021-11-11 09:00:28',
-    y: 42000,
-  },
-];
+import { DataService } from '../services/data.service';
+import { CorsairPlugin } from '../util/custom-plugin';
+import { externalTooltipHandler } from '../util/custom-tooltip';
 
 @Component({
   selector: 'app-chartjs',
@@ -51,32 +27,42 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
   canvas!: ElementRef;
 
   chart!: any;
+  aggregatedData: any;
 
   public lineChartOptions: any;
 
-  date_list = [
-    '2021-11-06 23:39:30',
-    '2021-11-07 01:00:28',
-    '2021-11-08 09:00:28',
-    '2021-11-09 09:00:28',
-    '2021-11-10 09:00:28',
-  ];
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    const today = new Date();
+    this.aggregatedData = this.dataService.getDataForChart('ALS');
+
     const chartCtx = this.canvas.nativeElement;
-    Chart.register([annotationPlugin, zoomPlugin, ChartJSdragDataPlugin]);
+    Chart.register([
+      annotationPlugin,
+      zoomPlugin,
+      ChartJSdragDataPlugin,
+      CorsairPlugin,
+    ]);
+
     this.chart = new Chart(chartCtx, {
       type: 'line',
       data: {
-        labels: this.date_list,
         datasets: [
           {
-            data: [2000, 3000, 5000, 2100, 4500],
+            label: 'Original',
+            custom: {
+              tooltipLabel: 'Total Deliveries',
+            },
+            data: this.aggregatedData.map((agg: { y: number }) => ({
+              ...agg,
+              y: agg.y,
+            })),
             fill: false,
-            tension: 0.4,
-            borderWidth: 1,
+            tension: 0,
+            borderWidth: 2,
             pointHitRadius: 25, // for improved touch support
             // dragData: false // prohibit dragging this dataset
             // same as returning `false` in the onDragStart callback
@@ -86,13 +72,16 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
       },
       options: {
         responsive: false,
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
         scales: {
           x: {
             type: 'timeseries',
-            min: '2021-11-05 00:00:00',
-            max: '2021-11-10 00:00:00',
             time: {
               minUnit: 'day',
+              isoWeekday: true,
             },
             ticks: {
               maxRotation: 14,
@@ -100,12 +89,24 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
             },
           },
           y: {
-            min: 1000,
-            max: 7000,
+            max: Math.max(...this.aggregatedData.map((o: any) => o.y)) + 300,
+            min: Math.min(...this.aggregatedData.map((o: any) => o.y)) - 300,
           },
         },
         plugins: {
           zoom: {
+            limits: {
+              x: {
+                min: this.aggregatedData[0].x,
+                max: this.aggregatedData[this.aggregatedData.length - 1].x,
+              },
+              y: {
+                min:
+                  Math.min(...this.aggregatedData.map((o: any) => o.y)) - 300,
+                max:
+                  Math.max(...this.aggregatedData.map((o: any) => o.y)) + 300,
+              },
+            },
             zoom: {
               wheel: {
                 enabled: true,
@@ -113,7 +114,7 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
               pinch: {
                 enabled: true,
               },
-              mode: 'x',
+              mode: 'xy',
               onZoomComplete: ({ chart }: any) => {},
             },
             pan: {
@@ -122,7 +123,9 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
             },
           },
           dragData: {
+            round: 0,
             onDragStart: (e: MouseEvent, datasetIndex: number) => {
+              this.chart.data.datasets[0].label = 'Adjusted';
               return datasetIndex === 0 ? true : false;
             },
             onDrag: (
@@ -144,10 +147,56 @@ export class ChartjsComponent implements OnInit, AfterViewInit {
               this.createOriginalData();
             },
           },
+          tooltip: {
+            enabled: false,
+            intersect: false,
+            mode: 'index',
+            external: externalTooltipHandler,
+          },
+          corsair: {
+            horizontal: false,
+            vertical: true,
+            color: '#575654',
+            dash: [5, 5],
+            width: 2,
+          },
+          annotation: {
+            annotations: {
+              box1: {
+                type: 'box',
+                xMax: '2022-10-13',
+                backgroundColor: 'rgba(255, 99, 132, 0.25)',
+              },
+            },
+          },
         },
       },
     });
   }
 
-  createOriginalData() {}
+  createOriginalData() {
+    if (this.chart.data.datasets.length > 1) {
+      return;
+    }
+
+    this.chart.data.datasets[0].label = 'Adjusted';
+    this.chart.data.datasets.push({
+      animation: false,
+      label: 'Original',
+      data: this.aggregatedData.map((agg: { y: number }) => ({
+        ...agg,
+        y: agg.y,
+      })),
+      custom: {
+        tooltipLabel: 'Total Deliveries',
+      },
+      fill: false,
+      tension: 0,
+      borderWidth: 1,
+      pointHitRadius: 25, // for improved touch support
+      borderDash: [10, 10],
+      dragData: false,
+    });
+    this.chart.update();
+  }
 }

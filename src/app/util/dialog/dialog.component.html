@@ -1,0 +1,14 @@
+<div mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ data.label }}</mat-label>
+    <input
+      #input
+      matInput
+      type="number"
+      appShiftIncrementValue
+      [(ngModel)]="data.value"
+      (keydown.enter)="change()"
+      (focus)="input.select()"
+    />
+  </mat-form-field>
+</div>

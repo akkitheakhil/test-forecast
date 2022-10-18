@@ -1,0 +1,48 @@
+:host {
+
+  ::ng-deep {
+    .custom-chart-tooltip {
+
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2), 0px 0px 4px rgba(0, 0, 0, 0.2);
+      color: black;
+      pointer-events: none;
+      position: absolute;
+      transform: translate(20px, -50%);
+      transition: all .1s ease;
+      width: 200px;
+
+
+
+      .tooltip-body {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        font-weight: 400;
+
+        .tooltip-row {
+          padding: 10px 8px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .icon {
+            height: 20px;
+            width: 4px;
+            border-radius: 12px;
+          }
+        }
+
+        .tooltip-footer {
+          display: flex;
+          padding: 8px 12px;
+          border-top: 1px solid #F1F0EF;
+          color: #9A9997;
+        }
+      }
+    }
+
+
+      }
+}

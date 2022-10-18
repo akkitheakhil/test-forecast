@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ChartjsComponent } from './chartjs/chartjs.component';
 import { HighchartComponent } from './highchart/highchart.component';
 import { NavigatorComponent } from './navigator/navigator.component';
+import { PrimengComponent } from './primeng/primeng.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'highchart',
     component: HighchartComponent,
+  },
+  {
+    path: 'primeng',
+    component: PrimengComponent,
   },
   {
     path: '',

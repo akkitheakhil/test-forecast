@@ -12,6 +12,7 @@
   "include": [
     "src/**/*.d.ts",
     "chartjs-custom-type.d.ts",
-    "chartjs-data-drag.d.ts"
+    "chartjs-data-drag.d.ts",
+    "chartjs-corsair-type.d.ts"
   ]
 }

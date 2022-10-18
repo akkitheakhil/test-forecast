@@ -1,0 +1,48 @@
+<div class="card">
+  <div class="header">
+    <h1>Chart Library POC</h1>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Hubs</mat-label>
+    <mat-select [(value)]="hub" (selectionChange)="onNewHubSelected()">
+      <ng-container *ngFor="let item of allHubs">
+        <mat-option [value]="item">{{ item }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+  <p-chart
+    #chart
+    type="line"
+    [data]="multiAxisData"
+    [options]="multiAxisOptions"
+    [plugins]="plugin"
+    height="500"
+  ></p-chart>
+</div>
+<div class="left">
+  <h1>GUIDE</h1>
+  <p>Options available on the chart</p>
+  <ul>
+    <li>
+      User can use the mouse wheel to zoom-in & zoom-out of the chart or use
+      zoom with trackpad as well
+    </li>
+    <li>
+      Once zoomed, user can click and drag on the chart to pan around the chart
+    </li>
+    <li>User can drag the point to change its value</li>
+    <li>
+      When clicking on a point, a new popup will be available, where the user
+      can type any specific value to change the point.
+    </li>
+    <li>
+      On the popup, user can use keyboard's 'up' and 'down' arrows to change the
+      values, when holding shift, and the value will change with an increment of
+      10
+    </li>
+    <li>
+      Hovering over a point will reveal more information about the point in a
+      tooltip, also line along the yAxis with annotation about the date
+    </li>
+  </ul>
+</div>
